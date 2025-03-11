@@ -2,13 +2,8 @@
 
 namespace UKParliament.CodeTest.Data;
 
-public class PersonManagerContext : DbContext
+public class PersonManagerContext(DbContextOptions<PersonManagerContext> options) : DbContext(options)
 {
-    public PersonManagerContext(DbContextOptions<PersonManagerContext> options) : base(options)
-    {
-
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

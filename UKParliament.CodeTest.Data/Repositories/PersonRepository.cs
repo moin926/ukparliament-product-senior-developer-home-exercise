@@ -1,33 +1,56 @@
-﻿namespace UKParliament.CodeTest.Data.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace UKParliament.CodeTest.Data.Repositories;
 
 public class PersonRepository : IPersonRepository
 {
-    public Task<Person> GetByIdAsync(int id)
+    private readonly PersonManagerContext _context;
+
+    public PersonRepository(PersonManagerContext context)
     {
-        throw new NotImplementedException();
-    }
-    public Task<IEnumerable<Person>> GetAsync()
-    {
-        throw new NotImplementedException();
+        _context = context;
     }
 
-    public Task<IEnumerable<Person>> GetPagedAsync(int pageNumber, int pageSize)
+    public async Task<IEnumerable<Person>> GetAsync()
     {
-        throw new NotImplementedException();
+        return await _context.People.Include(p => p.Department).ToListAsync();
     }
 
-    public Task AddAsync(Person person)
+    public async Task<IEnumerable<Person>> GetPagedAsync(int pageNumber, int pageSize)
     {
-        throw new NotImplementedException();
+        return await _context.People
+            .Include(p => p.Department)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
     }
 
-    public Task UpdateAsync(Person person)
+    public async Task<Person?> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _context.People
+            .Include(p => p.Department)
+            .FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public Task DeleteAsync(int id)
+    public async Task AddAsync(Person person)
     {
-        throw new NotImplementedException();
+        _context.People.Add(person);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateAsync(Person person)
+    {
+        _context.People.Update(person);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var person = await _context.People.FindAsync(id);
+        if (person is not null)
+        {
+            _context.People.Remove(person);
+            await _context.SaveChangesAsync();
+        }
     }
 }

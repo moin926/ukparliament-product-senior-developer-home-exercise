@@ -1,9 +1,19 @@
-﻿namespace UKParliament.CodeTest.Data.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace UKParliament.CodeTest.Data.Repositories;
 
 public class DepartmentRepository : IDepartmentRepository
 {
-    public Task<IEnumerable<Department>> GetAsync()
+
+    private readonly PersonManagerContext _context;
+
+    public DepartmentRepository(PersonManagerContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
+    }
+
+    public async Task<IEnumerable<Department>> GetAsync()
+    {
+        return await _context.Departments.ToListAsync();
     }
 }
