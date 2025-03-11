@@ -11,26 +11,20 @@ public class PersonRepository : IPersonRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Person>> GetAsync()
-    {
-        return await _context.People.Include(p => p.Department).ToListAsync();
-    }
+    public async Task<IEnumerable<Person>> GetAsync() => 
+        await _context.People.Include(p => p.Department).ToListAsync();
 
-    public async Task<IEnumerable<Person>> GetPagedAsync(int pageNumber, int pageSize)
-    {
-        return await _context.People
+    public async Task<IEnumerable<Person>> GetPagedAsync(int pageNumber, int pageSize) => 
+        await _context.People
             .Include(p => p.Department)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
-    }
 
-    public async Task<Person?> GetByIdAsync(int id)
-    {
-        return await _context.People
+    public async Task<Person?> GetByIdAsync(int id) => 
+        await _context.People
             .Include(p => p.Department)
             .FirstOrDefaultAsync(p => p.Id == id);
-    }
 
     public async Task AddAsync(Person person)
     {
