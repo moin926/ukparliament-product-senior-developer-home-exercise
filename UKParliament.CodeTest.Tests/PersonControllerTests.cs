@@ -1,21 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using UKParliament.CodeTest.Data;
 using UKParliament.CodeTest.Services;
 using UKParliament.CodeTest.Web.Controllers;
+using UKParliament.CodeTest.Web.Validators;
+using UKParliament.CodeTest.Web.ViewModels;
 using Xunit;
 
 namespace UKParliament.CodeTest.Tests;
 
 public class PersonControllerTests
 {
+    private readonly IValidator<PersonViewModel> _realValidator;
     private readonly Mock<IPersonService> _mockService;
     private readonly PersonController _controller;
 
     public PersonControllerTests()
     {
+        _realValidator = new PersonRequestValidator();
         _mockService = new Mock<IPersonService>();
-        _controller = new PersonController(_mockService.Object);
+
+        _controller = new PersonController(_realValidator, _mockService.Object);
     }
 
     [Fact]

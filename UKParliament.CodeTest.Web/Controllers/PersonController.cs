@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using UKParliament.CodeTest.Data;
 using UKParliament.CodeTest.Services;
 using UKParliament.CodeTest.Web.ViewModels;
@@ -9,10 +13,12 @@ namespace UKParliament.CodeTest.Web.Controllers;
 [ApiController]
 public class PersonController : ControllerBase
 {
+    private readonly IValidator<PersonViewModel> _validator;
     private readonly IPersonService _personService;
 
-    public PersonController(IPersonService personService)
+    public PersonController(IValidator<PersonViewModel> validator, IPersonService personService)
     {
+        _validator = validator;
         _personService = personService;
     }
 
@@ -48,6 +54,12 @@ public class PersonController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreatePerson([FromBody] PersonViewModel request)
     {
+        ValidationResult result = await _validator.ValidateAsync(request);
+        if (!result.IsValid)
+        {
+            result.AddToModelState(ModelState);
+        }
+
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
@@ -63,5 +75,16 @@ public class PersonController : ControllerBase
 
         await _personService.AddPersonAsync(person);
         return CreatedAtAction(nameof(GetPerson), new { id = person.Id }, person);
+    }
+}
+
+public static class Extensions
+{
+    public static void AddToModelState(this ValidationResult result, ModelStateDictionary modelState)
+    {
+        foreach (var error in result.Errors)
+        {
+            modelState.AddModelError(error.PropertyName, error.ErrorMessage);
+        }
     }
 }
