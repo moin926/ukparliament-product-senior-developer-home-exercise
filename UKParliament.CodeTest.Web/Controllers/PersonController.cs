@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
 using UKParliament.CodeTest.Data;
 using UKParliament.CodeTest.Services;
+using UKParliament.CodeTest.Web.Validators;
 using UKParliament.CodeTest.Web.ViewModels;
 
 namespace UKParliament.CodeTest.Web.Controllers;
@@ -31,10 +30,11 @@ public class PersonController : ControllerBase
     }
 
     // GET api/person?PageNumber=1&PageSize=10
-    [HttpGet()]
-    public async Task<ActionResult<IEnumerable<Person>>> GetPeople([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    [HttpGet("paged")]
+    public async Task<ActionResult<IEnumerable<Person>>> GetPeoplePaged([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var people = await _personService.GetPagedPersonsAsync(pageNumber, pageSize);
+
         return Ok(people);
     }
 
@@ -47,6 +47,7 @@ public class PersonController : ControllerBase
         {
             return NotFound();
         }
+
         return Ok(person);
     }
 
@@ -74,17 +75,8 @@ public class PersonController : ControllerBase
         };
 
         await _personService.AddPersonAsync(person);
+
         return CreatedAtAction(nameof(GetPerson), new { id = person.Id }, person);
     }
 }
 
-public static class Extensions
-{
-    public static void AddToModelState(this ValidationResult result, ModelStateDictionary modelState)
-    {
-        foreach (var error in result.Errors)
-        {
-            modelState.AddModelError(error.PropertyName, error.ErrorMessage);
-        }
-    }
-}

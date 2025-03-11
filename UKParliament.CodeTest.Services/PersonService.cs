@@ -1,36 +1,46 @@
 ﻿using UKParliament.CodeTest.Data;
+using UKParliament.CodeTest.Data.Repositories;
 
 namespace UKParliament.CodeTest.Services;
 
 public class PersonService : IPersonService
 {
-    public Task AddPersonAsync(Person person)
+    private readonly IPersonRepository _personRepository;
+
+    public PersonService(IPersonRepository personRepository)
     {
-        throw new NotImplementedException();
+        _personRepository = personRepository;
     }
 
-    public Task DeletePersonAsync(int id)
+    public async Task<IEnumerable<Person>> GetPersonsAsync()
     {
-        throw new NotImplementedException();
+        return await _personRepository.GetAsync();
     }
 
-    public Task<IEnumerable<Person>> GetPagedPersonsAsync(int pageNumber, int pageSize)
+    public async Task<IEnumerable<Person>> GetPagedPersonsAsync(int pageNumber, int pageSize)
     {
-        throw new NotImplementedException();
+        return await  _personRepository.GetPagedAsync(pageNumber, pageSize);
     }
 
-    public Task<Person?> GetPersonAsync(int id)
+    public async Task<Person?> GetPersonAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _personRepository.GetByIdAsync(id);
     }
 
-    public Task<IEnumerable<Person>> GetPersonsAsync()
+    public async Task AddPersonAsync(Person person)
     {
-        throw new NotImplementedException();
+        person.Id = 0;
+
+        await _personRepository.AddAsync(person);
     }
 
-    public Task UpdatePersonAsync(Person person)
+    public async Task UpdatePersonAsync(Person person)
     {
-        throw new NotImplementedException();
+        await _personRepository.UpdateAsync(person);
+    }
+
+    public async Task DeletePersonAsync(int id)
+    {
+        await _personRepository.DeleteAsync(id);
     }
 }

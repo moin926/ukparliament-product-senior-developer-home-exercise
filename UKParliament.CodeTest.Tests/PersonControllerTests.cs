@@ -41,7 +41,8 @@ public class PersonControllerTests
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         var returnPersons = Assert.IsAssignableFrom<IEnumerable<Person>>(okResult.Value);
-        Assert.Equal(2, ((List<Person>)returnPersons).Count);
+
+        Assert.Equal(2, returnPersons.Count());
     }
 
     [Fact]
