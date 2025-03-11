@@ -15,6 +15,5 @@ public class Person
 
     public int DepartmentId { get; set; }
 
-    [JsonIgnore]
     public Department? Department { get; set; }
 }

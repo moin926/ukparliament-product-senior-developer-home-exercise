@@ -26,16 +26,17 @@ public class PersonController : ControllerBase
     public async Task<ActionResult<IEnumerable<Person>>> GetPeople()
     {
         var people = await _personService.GetPersonsAsync();
+
         return Ok(people);
     }
 
     // GET api/person?PageNumber=1&PageSize=10
     [HttpGet("paged")]
-    public async Task<ActionResult<IEnumerable<Person>>> GetPeoplePaged([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    public async Task<ActionResult<PagedResult<Person>>> GetPeoplePaged([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
-        var people = await _personService.GetPagedPersonsAsync(pageNumber, pageSize);
+        var pagedPeople = await _personService.GetPagedPersonsAsync(pageNumber, pageSize);
 
-        return Ok(people);
+        return Ok(pagedPeople);
     }
 
     // GET api/person/5
@@ -77,6 +78,52 @@ public class PersonController : ControllerBase
         await _personService.AddPersonAsync(person);
 
         return CreatedAtAction(nameof(GetPerson), new { id = person.Id }, person);
+    }
+
+    // PUT api/person/5
+    [HttpPut("{id}")]
+    public async Task<ActionResult> UpdatePerson(int id, [FromBody] PersonViewModel request)
+    {
+        ValidationResult result = await _validator.ValidateAsync(request);
+        if (!result.IsValid)
+        {
+            result.AddToModelState(ModelState);
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var existingPerson = await _personService.GetPersonAsync(id);
+        if (existingPerson == null)
+        {
+            return NotFound();
+        }
+
+        existingPerson.FirstName = request.FirstName;
+        existingPerson.LastName = request.LastName;
+        existingPerson.DateOfBirth = request.DateOfBirth;
+        existingPerson.DepartmentId = request.DepartmentId;
+
+        await _personService.UpdatePersonAsync(existingPerson);
+
+        return NoContent();
+    }
+
+    // DELETE api/person/5
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeletePerson(int id)
+    {
+        var existingPerson = await _personService.GetPersonAsync(id);
+        if (existingPerson == null)
+        {
+            return NotFound();
+        }
+
+        await _personService.DeletePersonAsync(id);
+        
+        return NoContent();
     }
 }
 

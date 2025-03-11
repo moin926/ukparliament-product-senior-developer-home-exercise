@@ -2,6 +2,7 @@
 
 public interface IPersonRepository
 {
+    Task<int> CountAsync();
     Task<IEnumerable<Person>> GetAsync();
     Task<IEnumerable<Person>> GetPagedAsync(int pageNumber, int pageSize);
     Task<Person?> GetByIdAsync(int id);

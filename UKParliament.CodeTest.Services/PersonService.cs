@@ -17,9 +17,16 @@ public class PersonService : IPersonService
         return await _personRepository.GetAsync();
     }
 
-    public async Task<IEnumerable<Person>> GetPagedPersonsAsync(int pageNumber, int pageSize)
-    {
-        return await  _personRepository.GetPagedAsync(pageNumber, pageSize);
+    public async Task<PagedResult<Person>> GetPagedPersonsAsync(int pageNumber, int pageSize)
+    {       
+        var count = await _personRepository.CountAsync();
+        var values = await  _personRepository.GetPagedAsync(pageNumber, pageSize);
+
+        return new PagedResult<Person>() 
+        {
+            Pages = (count + pageSize - 1) / pageSize,
+            Values = values 
+        };
     }
 
     public async Task<Person?> GetPersonAsync(int id)

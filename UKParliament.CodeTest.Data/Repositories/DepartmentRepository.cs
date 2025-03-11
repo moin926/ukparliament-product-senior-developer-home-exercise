@@ -12,8 +12,10 @@ public class DepartmentRepository : IDepartmentRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Department>> GetAsync()
-    {
-        return await _context.Departments.ToListAsync();
-    }
+    public async Task<IEnumerable<Department>> GetAsync() =>
+        await _context.Departments.ToListAsync();    
+
+    public async Task<Department?> GetByIdAsync(int id) => 
+        await _context.Departments.FirstOrDefaultAsync(x => x.Id == id);
+    
 }

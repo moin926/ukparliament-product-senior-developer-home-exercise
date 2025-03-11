@@ -13,9 +13,9 @@ public class PersonRequestValidator : AbstractValidator<PersonViewModel>
         RuleFor(x => x.LastName)
             .NotEmpty().WithMessage("Last name is required.");
 
-        RuleFor(x => x.DateOfBirth)
+        RuleFor(x => x.DateOfBirth.Date)
             .NotEmpty().WithMessage("Date of birth is required.")
-            .LessThan(DateTime.Now).WithMessage("Date of birth must be in the past.");
+            .LessThan(DateTime.Now.Date).WithMessage("Date of birth must be in the past.");
 
         RuleFor(x => x.DepartmentId)
             .GreaterThan(0).WithMessage("A valid department must be selected.");

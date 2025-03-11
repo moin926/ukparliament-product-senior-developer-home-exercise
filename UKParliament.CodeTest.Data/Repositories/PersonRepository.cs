@@ -5,11 +5,16 @@ namespace UKParliament.CodeTest.Data.Repositories;
 public class PersonRepository : IPersonRepository
 {
     private readonly PersonManagerContext _context;
+    private readonly IDepartmentRepository _departmentRepository;
 
-    public PersonRepository(PersonManagerContext context)
+    public PersonRepository(PersonManagerContext context, IDepartmentRepository departmentRepository)
     {
         _context = context;
+        _departmentRepository = departmentRepository;
     }
+
+    public async Task<int> CountAsync() =>
+        await _context.People.CountAsync();
 
     public async Task<IEnumerable<Person>> GetAsync() => 
         await _context.People.Include(p => p.Department).ToListAsync();
@@ -30,12 +35,16 @@ public class PersonRepository : IPersonRepository
     {
         _context.People.Add(person);
         await _context.SaveChangesAsync();
+
+        person.Department = await _departmentRepository.GetByIdAsync(person.DepartmentId);
     }
 
     public async Task UpdateAsync(Person person)
     {
         _context.People.Update(person);
         await _context.SaveChangesAsync();
+
+        person.Department = await _departmentRepository.GetByIdAsync(person.DepartmentId);
     }
 
     public async Task DeleteAsync(int id)

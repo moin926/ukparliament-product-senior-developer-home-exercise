@@ -24,8 +24,8 @@ public class Program
         builder.Services.AddScoped<IPersonRepository, PersonRepository>();
         builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
         builder.Services.AddScoped<IPersonService, PersonService>();
+        builder.Services.AddScoped<IDepartmentService, DepartmentService>();
         builder.Services.AddScoped<IValidator<PersonViewModel>, PersonRequestValidator>();
-
 
         var app = builder.Build();
 
