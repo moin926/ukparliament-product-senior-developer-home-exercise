@@ -27,6 +27,9 @@ public class Program
         builder.Services.AddScoped<IDepartmentService, DepartmentService>();
         builder.Services.AddScoped<IValidator<PersonViewModel>, PersonRequestValidator>();
 
+        // Add memory cache (used by the DepartmentService for caching).
+        builder.Services.AddMemoryCache();
+
         var app = builder.Build();
 
         // Create database so the data seeds
