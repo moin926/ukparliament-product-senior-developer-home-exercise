@@ -1,16 +1,67 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UKParliament.CodeTest.Data;
+using UKParliament.CodeTest.Services;
 using UKParliament.CodeTest.Web.ViewModels;
 
 namespace UKParliament.CodeTest.Web.Controllers;
 
-[ApiController]
 [Route("api/[controller]")]
+[ApiController]
 public class PersonController : ControllerBase
 {
-    [Route("{id:int}")]
-    [HttpGet]
-    public ActionResult<PersonViewModel> GetById(int id)
+    private readonly IPersonService _personService;
+
+    public PersonController(IPersonService personService)
     {
-        return Ok(new PersonViewModel() { FirstName = "", LastName = "" });
+        _personService = personService;
+    }
+
+    // GET api/person
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Person>>> GetPeople()
+    {
+        var people = await _personService.GetPersonsAsync();
+        return Ok(people);
+    }
+
+    // GET api/person?PageNumber=1&PageSize=10
+    [HttpGet()]
+    public async Task<ActionResult<IEnumerable<Person>>> GetPeople([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    {
+        var people = await _personService.GetPagedPersonsAsync(pageNumber, pageSize);
+        return Ok(people);
+    }
+
+    // GET api/person/5
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Person>> GetPerson(int id)
+    {
+        var person = await _personService.GetPersonAsync(id);
+        if (person == null)
+        {
+            return NotFound();
+        }
+        return Ok(person);
+    }
+
+    // POST api/person
+    [HttpPost]
+    public async Task<ActionResult> CreatePerson([FromBody] PersonViewModel request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var person = new Person
+        {
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            DateOfBirth = request.DateOfBirth,
+            DepartmentId = request.DepartmentId
+        };
+
+        await _personService.AddPersonAsync(person);
+        return CreatedAtAction(nameof(GetPerson), new { id = person.Id }, person);
     }
 }
