@@ -66,7 +66,13 @@ describe('PersonManagerComponent', () => {
     personListStub.newPerson.emit();
     fixture.detectChanges();
     // Adjust the expected blank object to match your component's logic.
-    const expectedBlank: Person = { id: null, firstName: '', lastName: '', dateOfBirth: null, departmentId: 0 } as unknown as Person;
+    const expectedBlank: Person = { 
+      id: null, 
+      firstName: '', 
+      lastName: '', 
+      dateOfBirth: null, 
+      departmentId: 0 
+    } as unknown as Person;
     expect(component.selectedPerson).toEqual(expectedBlank);
   });
 });
