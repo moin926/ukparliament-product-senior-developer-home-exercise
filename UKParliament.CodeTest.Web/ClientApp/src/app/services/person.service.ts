@@ -13,6 +13,11 @@ export class PersonService {
   private apiPath: string = 'api/person';
 
   // Retrieves all people (could be extended to support paging if needed)
+  getPeopleCount(): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}${this.apiPath}/count`);
+  }
+
+  // Retrieves all people (could be extended to support paging if needed)
   getPeople(): Observable<Person[]> {
     return this.http.get<Person[]>(`${this.baseUrl}${this.apiPath}`);
   }

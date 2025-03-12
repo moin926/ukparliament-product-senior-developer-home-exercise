@@ -22,6 +22,15 @@ public class PersonController : ControllerBase
     }
 
     // GET api/person
+    [HttpGet("count")]
+    public async Task<ActionResult<int>> CountPeople()
+    {
+        var count = await _personService.CountPersonsAsync();
+
+        return Ok(count);
+    }
+
+    // GET api/person
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Person>>> GetPeople()
     {

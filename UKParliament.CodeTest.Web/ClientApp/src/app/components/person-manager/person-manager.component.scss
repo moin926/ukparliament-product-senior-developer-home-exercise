@@ -1,32 +1,29 @@
-.pm-container {
+.person-manager-container {
   display: flex;
   flex-direction: row;
-  min-height: 100vh;
-  min-width: auto;
-
-  app-person-list {
-    width: 30%;
-  }
-  app-person-editor {
-    width: 70%;
-  }
+  //min-width: auto;
+  min-height: 100vh; /* Full viewport height */
 
   @media (max-width: 768px) {
-    flex-direction: column;
-
     app-person-list, app-person-editor {
       width: auto;
     }
-  }
-}
-  
-.person-list {
-  flex: 1;
-  padding: 10px;
-  background-color: #f2f2f2;
-}
+    app-person-editor {
+      margin-top: 5vh;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
 
-.person-editor {
-  flex: 2;
-  padding: 10px;
+    flex-direction: column;
+  }
+
+  app-person-list {
+    flex: 1;
+    margin-right: 10px; /* Spacing between list and editor */
+    //width: 30%;
+  }
+
+  app-person-editor {
+    flex: 2;
+    //width: 70%;
+  }
 }

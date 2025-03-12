@@ -48,16 +48,23 @@
       }
     }
     
+
     button {
+      background-color: #04AA6D; /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
       width: 100px;
       padding: 5px;
-      cursor: pointer;
-      margin-top: 10px;
       align-self: flex-end;
     }
     
     button:disabled {
-      background-color: #ccc;
+      background-color: #80b09f;
       cursor: not-allowed;
     }
   }

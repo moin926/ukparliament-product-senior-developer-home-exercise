@@ -13,9 +13,8 @@ import { PersonEditorComponent } from './components/person-editor/person-editor.
 @NgModule({ 
     declarations: [
         AppComponent,
-        PersonManagerComponent,
-        PersonListComponent,
-        PersonEditorComponent,
+    PersonManagerComponent,
+    PersonEditorComponent,
         HomeComponent
     ],
     bootstrap: [AppComponent], 
@@ -27,7 +26,8 @@ import { PersonEditorComponent } from './components/person-editor/person-editor.
         ]),
         BrowserModule,
         HttpClientModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        PersonListComponent,
     ], 
     providers: [provideHttpClient(withInterceptorsFromDi())] 
 })

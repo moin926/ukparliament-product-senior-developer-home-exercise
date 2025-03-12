@@ -1,7 +1,33 @@
 <div class="person-list">
-    <ul>
-        <li *ngFor="let person of people" (click)="onSelect(person)">
-            {{ person.firstName }} {{ person.lastName }}
-        </li>
-    </ul>
+  <ul>
+    <li *ngFor="let person of pagedPersons">
+      <div class="person-info" (click)="onSelect(person)">
+        <img src="assets/person.svg" alt="Person Icon" class="person-icon" />
+        <span class="person-name">{{ person.firstName }} {{ person.lastName }}</span>
+      </div>
+      <button class="delete-button" (click)="deletePerson(person, $event)">
+        <img src="assets/delete.svg" alt="Delete" />
+      </button>
+    </li>
+  </ul>
+  <div class="pagination-controls">
+    <div class="pager">
+      <button class="prev-button" 
+              (click)="prevPage()"
+              [disabled]="(currentPage === 1) || (pagedPersons.length === 0)">
+        <img src="assets/prev.svg" alt="Previous" />
+      </button>
+      <span class="page-number">
+        <strong>Page {{ currentPage }} of {{ totalPages }}</strong>
+      </span>
+      <button class="next-button" 
+              (click)="nextPage()"
+              [disabled]="(currentPage === totalPages) || (pagedPersons.length === 0)">
+        <img src="assets/next.svg" alt="Next" />
+      </button>
+    </div>
+    <button class="new-person-button" (click)="createNewPerson()">
+      <img src="assets/new.svg" alt="New Person" />
+    </button>
+  </div>
 </div>

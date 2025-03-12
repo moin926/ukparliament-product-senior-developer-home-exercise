@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, SimpleChanges, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Person } from '@models/person.model';
 import { Department } from '@models/department.model';
@@ -12,6 +12,7 @@ import { PersonService } from '@services/person.service';
 })
 export class PersonEditorComponent implements OnInit, OnChanges {
   @Input() person: Person | null = null;
+  @Output() personSaved = new EventEmitter<Person>();
   personForm!: FormGroup;
   departments: Department[] = [];
 
@@ -23,8 +24,8 @@ export class PersonEditorComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.initializeForm();
-    // Load departments from the API.
-    this.departmentService.getDepartments().subscribe(data => {
+    // Load departments (cached by DepartmentService)
+    this.departmentService.getDepartments().subscribe((data: Department[]) => {
       this.departments = data;
     });
   }
@@ -43,13 +44,6 @@ export class PersonEditorComponent implements OnInit, OnChanges {
     }
   }
 
-/*   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.person && changes.person.currentValue) {
-      // Patch the form with the selected person's data.
-      this.personForm.patchValue(changes.person.currentValue);
-    }
-  } */
-
   initializeForm(): void {
     this.personForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -59,7 +53,7 @@ export class PersonEditorComponent implements OnInit, OnChanges {
     });
   }
 
-  // Custom validator to ensure the date is in the past.
+  // Custom validator: Ensure the date is in the past.
   dateInPastValidator(control: AbstractControl) {
     const dateValue = new Date(control.value);
     if (!control.value || dateValue >= new Date()) {
@@ -72,28 +66,29 @@ export class PersonEditorComponent implements OnInit, OnChanges {
     if (this.personForm.valid) {
       const personData: Person = this.personForm.value;
       
-      // Determine whether to create or update.
+      // Check if we're updating an existing person or creating a new one.
       if (this.person && this.person.id) {
-        // Update an existing person.
+        // Update existing person.
         personData.id = this.person.id;
         this.personService.updatePerson(personData).subscribe({
           next: () => {
             console.log('Person updated successfully.');
+            this.personSaved.emit(personData);
           },
-          error: (err) => console.error('Error updating person:', err)
+          error: (err: any) => console.error('Error updating person:', err)
         });
       } else {
-        // Create a new person.
+        // Create new person.
         this.personService.createPerson(personData).subscribe({
-          next: (newPerson) => {
+          next: (newPerson: Person) => {
             console.log('Person created successfully:', newPerson);
+            this.personSaved.emit(newPerson);
           },
-          error: (err) => console.error('Error creating person:', err)
+          error: (err: any) => console.error('Error creating person:', err)
         });
       }
     } else {
       console.log('Form is invalid');
-      // Mark all controls as touched to display errors.
       this.personForm.markAllAsTouched();
     }
   }

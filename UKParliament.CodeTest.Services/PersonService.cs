@@ -12,6 +12,9 @@ public class PersonService : IPersonService
         _personRepository = personRepository;
     }
 
+    public async Task<int> CountPersonsAsync() =>
+        await _personRepository.CountAsync();
+
     public async Task<IEnumerable<Person>> GetPersonsAsync()
     {
         return await _personRepository.GetAsync();

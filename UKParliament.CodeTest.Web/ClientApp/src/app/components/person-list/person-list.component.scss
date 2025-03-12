@@ -1,25 +1,102 @@
 .person-list {
-    //width: 30%;
-    padding: 10px;
-    background-color: #f2f2f2;
+  /* On large screens, limit the height of the list and enable vertical scrolling */
+  @media (min-width: 768px) {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     cursor: pointer;
-  
-    ul {
-      list-style: none;
-      padding: 0;
+    
+    .person-info {
+      display: flex;
+      align-items: center;
     }
-  
-    li {
-      padding: 8px;
-      margin-bottom: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+    
+    .person-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
     }
+    
+    .delete-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      
+      img {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+  
+  .pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    
+    .pager {
+      display: flex;
+      align-items: center;
+      
+      .prev-button,
+      .next-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        &:disabled {
+          cursor: not-allowed;
+          opacity: 0.5;
+        }
+        
+        img {
+          width: 20px;
+          height: 20px;
+        }
+      }
+      
+      .page-number {
+        margin: 0 15px;
+        font-size: 1em;
+      }
+    }
+    
+    .new-person-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      
+      img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
 }
-  
-@media (max-width: 768px) {
-    .person-list {
-      width: 100%;
-    }
-}
-  
