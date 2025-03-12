@@ -1,0 +1,25 @@
+.person-list {
+    //width: 30%;
+    padding: 10px;
+    background-color: #f2f2f2;
+    cursor: pointer;
+  
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+  
+    li {
+      padding: 8px;
+      margin-bottom: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+}
+  
+@media (max-width: 768px) {
+    .person-list {
+      width: 100%;
+    }
+}
+  
