@@ -1,47 +1,58 @@
 <div class="person-editor">
-    <h2>Edit Person</h2>
-    <form [formGroup]="personForm" (ngSubmit)="onSave()">
-      <div>
+  <h2>Edit Person</h2>
+  <form [formGroup]="personForm" (ngSubmit)="onSave()">
+    <div class="form-group">
+      <div class="input-row">
         <label for="firstName">First Name:</label>
-        <input id="firstName" type="text" formControlName="firstName" [ngClass]="{'invalid': personForm.get('firstName')?.invalid && personForm.get('firstName')?.touched}" />
-        <div class="error" *ngIf="personForm.get('firstName')?.touched && personForm.get('firstName')?.invalid">
-          First Name is required.
-        </div>
+        <input id="firstName" type="text" formControlName="firstName" 
+              [ngClass]="{'invalid': personForm.get('firstName')?.invalid && personForm.get('firstName')?.touched}" />
       </div>
+      <div class="error" *ngIf="personForm.get('firstName')?.touched && personForm.get('firstName')?.invalid">
+        First Name is required.
+      </div>
+    </div>
   
-      <div>
+    <div class="form-group">
+      <div class="input-row">
         <label for="lastName">Last Name:</label>
-        <input id="lastName" type="text" formControlName="lastName" [ngClass]="{'invalid': personForm.get('lastName')?.invalid && personForm.get('lastName')?.touched}" />
-        <div class="error" *ngIf="personForm.get('lastName')?.touched && personForm.get('lastName')?.invalid">
-          Last Name is required.
-        </div>
+        <input id="lastName" type="text" formControlName="lastName" 
+              [ngClass]="{'invalid': personForm.get('lastName')?.invalid && personForm.get('lastName')?.touched}" />
       </div>
+      <div class="error" *ngIf="personForm.get('lastName')?.touched && personForm.get('lastName')?.invalid">
+        Last Name is required.
+      </div>
+    </div>
   
-      <div>
+    <div class="form-group">
+      <div class="input-row">
         <label for="dateOfBirth">Date of Birth:</label>
-        <input id="dateOfBirth" type="date" formControlName="dateOfBirth" [ngClass]="{'invalid': personForm.get('dateOfBirth')?.invalid && personForm.get('dateOfBirth')?.touched}" />
-        <div class="error" *ngIf="personForm.get('dateOfBirth')?.touched && personForm.get('dateOfBirth')?.errors">
-          <span *ngIf="personForm.get('dateOfBirth')?.errors?.['required']">Date of Birth is required.</span>
-          <span *ngIf="personForm.get('dateOfBirth')?.errors?.['dateInvalid']">
-            {{ personForm.get('dateOfBirth')?.errors?.['dateInvalid'] }}
-          </span>
-        </div>
+        <input id="dateOfBirth" type="date" formControlName="dateOfBirth" 
+              [ngClass]="{'invalid': personForm.get('dateOfBirth')?.invalid && personForm.get('dateOfBirth')?.touched}" />
       </div>
+      <div class="error" *ngIf="personForm.get('dateOfBirth')?.touched && personForm.get('dateOfBirth')?.errors">
+        <span *ngIf="personForm.get('dateOfBirth')?.errors?.['required']">Date of Birth is required.</span>
+        <span *ngIf="personForm.get('dateOfBirth')?.errors?.['dateInvalid']">
+          {{ personForm.get('dateOfBirth')?.errors?.['dateInvalid'] }}
+        </span>
+      </div>
+    </div>
   
-      <div>
+    <div class="form-group">
+      <div class="input-row">
         <label for="departmentId">Department:</label>
-        <select id="departmentId" formControlName="departmentId" [ngClass]="{'invalid': personForm.get('departmentId')?.invalid && personForm.get('departmentId')?.touched}">
+        <select id="departmentId" formControlName="departmentId" 
+                [ngClass]="{'invalid': personForm.get('departmentId')?.invalid && personForm.get('departmentId')?.touched}">
           <option value="">Select Department</option>
           <option *ngFor="let dept of departments" [value]="dept.id">
             {{ dept.name }}
           </option>
         </select>
-        <div class="error" *ngIf="personForm.get('departmentId')?.touched && personForm.get('departmentId')?.invalid">
-          Please select a department.
-        </div>
       </div>
+      <div class="error" *ngIf="personForm.get('departmentId')?.touched && personForm.get('departmentId')?.invalid">
+        Please select a department.
+      </div>
+    </div>
   
-      <button type="submit" [disabled]="!personForm.valid">Save</button>
-    </form>
-  </div>
-  
+    <button type="submit" [disabled]="!personForm.valid">Save</button>
+  </form>
+</div>
