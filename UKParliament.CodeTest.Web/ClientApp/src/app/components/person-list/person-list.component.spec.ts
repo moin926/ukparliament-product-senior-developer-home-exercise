@@ -81,14 +81,6 @@ describe('PersonListComponent (Standalone) via TestHostComponent', () => {
     hostFixture.detectChanges();
   });
 
-/*   it('should create and load paged persons on init', () => {
-    const personList = hostComponent.personListComponent;
-    expect(personList).toBeTruthy();
-    // We expect getPeoplePaged to have been called with (1, 4).
-    expect(personServiceSpy.getPeoplePaged).toHaveBeenCalledWith(personList.currentPage, 4);
-    expect(personList.pagedPersons.length).toBe(4);
-  }); */
-
   it('should correctly calculate total pages based on count and pageSize', () => {
     const personList = hostComponent.personListComponent;
     personList.totalCount = 13;
